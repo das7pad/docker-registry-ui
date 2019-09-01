@@ -130,8 +130,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         return this.fillInfo();
       });
       this.on('get-date', function() {
-        if (this.date !== undefined) {
-          return this.trigger('date', this.date);
+        if (this.creationDate !== undefined) {
+          return this.trigger('creation-date', this.creationDate);
         }
         return this.fillInfo();
       });
@@ -221,21 +221,34 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       oReq.send();
     };
 
-    registryUI.bytesToSize = function (bytes) {
-      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-      if (bytes == undefined || isNaN(bytes)) {
-        return '?';
-      } else if (bytes == 0) {
-        return '0 Byte';
-      }
-      const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-      return Math.ceil(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
-    };
-
     registryUI.taglist.go = function(image) {
       route('taglist/' + image);
     };
 
+    registryUI.getPageQueryParam = function() {
+      var qs = route.query();
+      try {
+        return qs.page !== undefined ? parseInt(qs.page.replace(/#.*/, '')) : 1;
+      } catch(e) { return 1; }
+    }
+
+    registryUI.getQueryParams = function(update) {
+      var qs = route.query();
+      update = update || {};
+      for (var key in qs) {
+        if (qs[key] !== undefined) {
+          qs[key] = qs[key].replace(/#!.*/, '');
+        } else {
+          delete qs[key];
+        }
+      }
+      for (var key in update) {
+        if (update[key] !== undefined) {
+          qs[key] = update[key];
+        }
+      }
+      return qs;
+    }
     route.start(true);
   </script>
 </app>
