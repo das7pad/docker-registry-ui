@@ -62,6 +62,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         registryUI.catalog.repositories = [];
       });
       oReq.addEventListener('loadend', function() {
+        if (!registryUI.url()) {
+          registryUI._url = window.location.origin + window.location.pathname.replace(/\/+$/, '')
+        }
         registryUI.catalog.loadend = true;
         registryUI.catalog.instance.update();
       });
