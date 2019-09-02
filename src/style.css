@@ -399,7 +399,25 @@ select {
 }
 
 .copy-to-clipboard {
-  padding: 12px 5px;
+  margin-left: 5px;
+}
+#image-tag-header {
+  /* spacing for clipboard  + default th spacing */
+  /* 5 + 2 + 3 + 24 + 3 + 2 + 18 */
+  padding-right: 57px;
+}
+image-tag, image-id, .copy-to-clipboard {
+  display: inline-block;
+}
+@media screen and (max-width: 1023px){
+  image-id {
+    display: none;
+  }
+}
+@media screen and (min-width: 1024px) {
+  #image-id-header {
+    padding-right: 57px;
+  }
 }
 
 .show-tag-history {
