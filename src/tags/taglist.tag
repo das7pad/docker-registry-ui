@@ -43,8 +43,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <tr>
         <th>Creation date</th>
         <th>Size</th>
+        <th id="image-content-digest-header">Content Digest</th>
 
         <th
+        id="image-tag-header"
         class="{ registryUI.taglist.asc ? 'material-card-th-sorted-ascending' : 'material-card-th-sorted-descending' }"
         onclick="registryUI.taglist.reverse();">Tag
         </th>
@@ -65,7 +67,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           <image-size image="{ image }"/>
         </td>
         <td>
+          <image-content-digest image="{ image }"/>
+          <copy-to-clipboard target="id" image={ image }/>
+        </td>
+        <td>
           <image-tag image="{ image }"/>
+          <copy-to-clipboard target="tag" image={ image }/>
         </td>
         <td class="show-tag-history">
           <tag-history-button image={ image }/>
