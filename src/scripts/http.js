@@ -14,6 +14,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+// IE11 monkey patching
+const Crypto = window.crypto || window.msCrypto;
+
 function Http() {
   this.oReq = new XMLHttpRequest();
   this.oReq.hasHeader = Http.hasHeader;
@@ -21,6 +24,28 @@ function Http() {
   this._events = {};
   this._headers = {};
 }
+
+Http.prototype.getContentDigest = function(cb) {
+  const headers = this.oReq.getAllResponseHeaders();
+  const start = headers.indexOf('etag: "sha256:');
+  if (start !== -1) {
+    // Advanced CORS headers set: 'access-control-expose-headers: ETag'
+    cb(headers.slice(start + 7, headers.indexOf('"', start + 7)))
+  } else {
+    Crypto.subtle.digest(
+      'SHA-256',
+      new TextEncoder().encode(this.oReq.responseText)
+    ).then(function (buffer) {
+      cb(
+        'sha256:' + Array.from(
+          new Uint8Array(buffer)
+        ).map(
+            b => b.toString(16).padStart(2, '0')
+        ).join('')
+      );
+    })
+  }
+};
 
 Http.prototype.addEventListener = function(e, f) {
   this._events[e] = f;

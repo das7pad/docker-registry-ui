@@ -22,7 +22,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <i class="material-icons">arrow_back</i>
       </material-button>
       <h2>
-        Tags of { registryUI.name() + '/' + registryUI.taglist.name }
+        Tags of { registryUI.taglist.name }
+        <div class="source-hint">
+          Sourced from { registryUI.name() + '/' + registryUI.taglist.name }
+        </div>
         <div class="item-count">{ registryUI.taglist.tags.length } tags</div>
       </h2>
     </div>
@@ -38,12 +41,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <table show="{ registryUI.taglist.loadend }" style="border: none;">
       <thead>
       <tr>
-        <th class="material-card-th-left">Repository</th>
-        <th></th>
         <th>Creation date</th>
         <th>Size</th>
+        <th id="image-content-digest-header">Content Digest</th>
 
         <th
+        id="image-tag-header"
         class="{ registryUI.taglist.asc ? 'material-card-th-sorted-ascending' : 'material-card-th-sorted-descending' }"
         onclick="registryUI.taglist.reverse();">Tag
         </th>
@@ -57,10 +60,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       </thead>
       <tbody>
       <tr each="{ image in this.opts.tags }">
-        <td class="material-card-th-left">{ image.name }</td>
-        <td class="copy-to-clipboard">
-          <copy-to-clipboard image={ image }/>
-        </td>
         <td>
           <image-date image="{ image }"/>
         </td>
@@ -68,7 +67,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           <image-size image="{ image }"/>
         </td>
         <td>
+          <image-content-digest image="{ image }"/>
+          <copy-to-clipboard target="id" image={ image }/>
+        </td>
+        <td>
           <image-tag image="{ image }"/>
+          <copy-to-clipboard target="tag" image={ image }/>
         </td>
         <td class="show-tag-history">
           <tag-history-button image={ image }/>

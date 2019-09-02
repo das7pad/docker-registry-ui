@@ -132,6 +132,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
         return this.fillInfo();
       });
+      this.on('get-content-id', function() {
+        if (this.id !== undefined) {
+          return this.trigger('content-id', this.id);
+        }
+        return this.fillInfo();
+      });
     };
 
     registryUI.DockerImage._tagReduce = function(acc, e) {
@@ -178,6 +184,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           self.layers = response.layers;
           self.trigger('size', self.size);
           self.trigger('sha256', self.sha256);
+          oReq.getContentDigest(function (id) {
+            self.id = id;
+            self.trigger('content-id', id);
+          });
           self.getBlobs(response.config.digest)
         } else if (this.status == 404) {
           registryUI.errorSnackbar('Manifest for ' + self.name + ':' + self.tag + ' not found');
